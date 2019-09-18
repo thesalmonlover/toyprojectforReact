@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import NavBar from './NavBar';
+
 
 const Rentals = (props) => {
     return ( 

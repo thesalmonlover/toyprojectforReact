@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
 import Form from "./common/Form";
 import Joi from 'joi-browser';
-import {getGenres} from '../services/fakeGenreService';
-import {getMovie, saveMovie} from '../services/fakeMovieService';
+import { getGenres } from "../services/genreService";
+import {getMovie, saveMovie} from '../services/movieService';
 
 class MoviesForm extends Form {
   state = {
@@ -15,12 +15,31 @@ class MoviesForm extends Form {
     genres:[],
     errors: {}
   };
-  componentDidMount() {
-    this.setState({genres:getGenres()});
-    if(this.props.match.params.id==="new") return;
-    const movie = getMovie(this.props.match.params.id);
-    if(!movie) return this.props.history.replace('/notfound');
-    this.setState({data:this.setMovieData(movie)});
+
+
+  async populateGenre() {
+    const {data:genres} = await getGenres()
+    this.setState({genres});
+  }
+
+  async populateMovie() {
+    try{
+      if(this.props.match.params.id==="new") return;
+      const {data:movie} = await getMovie(this.props.match.params.id);
+      this.setState({data:this.setMovieData(movie)});
+    }
+    catch (e) {
+      if(e.rsponse&&e.response.status)
+      this.props.history.replace('/notfound');
+      
+    }
+
+  }
+
+  async componentDidMount() {
+    await this.populateGenre();
+    await this.populateMovie();
+    
   }
 
   setMovieData= movie => {
@@ -43,8 +62,8 @@ class MoviesForm extends Form {
     dailyRentalRate:Joi.number().min(0).max(10).required().label("Rate")
   };
 
-  doSubmit = () => {
-    saveMovie(this.state.data);
+   doSubmit = async () => {
+   await saveMovie(this.state.data);
     this.props.history.push("/movies");
   };
 
