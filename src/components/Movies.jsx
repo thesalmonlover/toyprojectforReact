@@ -42,6 +42,10 @@ class Movies extends Component {
         toast.error("the movie has been already deleted");
         this.setState({movies:original});
       }
+      if(e.response&&e.response.status===400) {
+        toast.error("you are not authorized");
+        this.setState({movies:original});
+      }
       
     }
    
@@ -108,6 +112,8 @@ class Movies extends Component {
       searchWord
     } = this.state;
 
+   const {user} = this.props;
+
     if (movies.length === 0) return <p>There are no movies in the database</p>;
 
     const {data, count} = this.getPagedData();
@@ -127,7 +133,8 @@ class Movies extends Component {
         </div>
         <div className="col">
           <p>There are {count} movies in the database</p>
-          <Link to="/movies/new" className="btn btn-primary mb-2">add New Movie</Link>
+          {user&&<Link to="/movies/new" className="btn btn-primary mb-2">add New Movie</Link>}
+          
           <SearchBar onChange={this.searchHandler} value={searchWord} />
            <MoviesTable
             data={data}

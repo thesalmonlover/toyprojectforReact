@@ -8,7 +8,7 @@ import 'font-awesome/css/font-awesome.css';
 import {BrowserRouter} from 'react-router-dom';
 
 
-
+console.log("SUPERMAN",process.env.REACT_APP_NAME);
 ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

@@ -5,6 +5,8 @@ import { userRegister } from "./userService";
 const apiURL = `${URL}/auth`;
 const token = "token";
 
+http.setToken(getToken());
+
 export async function login({ username, password }) {
   const { data: jwt } = await http.post(apiURL, {
     email: username,
@@ -30,9 +32,15 @@ export async function loginNregister(data) {
   localStorage.setItem(token, response.headers["x-auth-token"]);
 }
 
+export function getToken(){
+    return localStorage.getItem(token);
+
+}
+
 export default {
   login,
   logout,
   loginNregister,
-  getCurrentUser
+  getCurrentUser,
+  getToken
 };

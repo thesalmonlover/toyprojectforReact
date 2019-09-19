@@ -13,6 +13,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 class App extends Component {
   state = {};
@@ -22,14 +23,17 @@ class App extends Component {
   }
 
   render() {
+    const {user} = this.state;
     return (
       <React.Fragment>
         <NavBar user={this.state.user} />
         <ToastContainer />
         <main className="container">
           <Switch>
-            <Route path="/movies/:id" component={MoviesForm} />
-            <Route path="/movies" component={Movies} />
+            
+            <ProtectedRoute path="/movies/:id" composition={MoviesForm}/>
+            }} />
+            <Route path="/movies" render={props => <Movies {...props} user={this.state.user} />} />
             <Route path="/notfound" component={NotFound} />
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
